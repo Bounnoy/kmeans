@@ -34,7 +34,8 @@ class KMeans:
         bestME = 0
         bestM = np.zeros((kvalue, xs))
 
-        for runs in range(1):
+        # Run training on the data 5 times and pick the best run.
+        for runs in range(5):
             random.seed()
 
             # Initialize initial cluster points.
@@ -91,6 +92,7 @@ class KMeans:
                     else:
                         same += 1
 
+                # If centroids don't change, don't iterate anymore.
                 if same == kvalue:
                     iter = False
 
@@ -142,6 +144,7 @@ class KMeans:
                 bestMSS = mss
                 bestME = me
                 bestM = m
+
         print("Best run: #" + str(bestRun+1))
         print("Average MSE = " + str(bestMSE))
         print("MSS = " + str(bestMSS))
@@ -165,6 +168,7 @@ class KMeans:
                 if td2[l][k] == td2[l][min]:
                     min = random.choice([k, min])
 
+            # If prediction is correct, increment correct counter.
             if int(m[min][-1]) == int(self.testData[l][-1]):
                 correct += 1
 
@@ -172,7 +176,7 @@ class KMeans:
             matrix[ int(m[min][-1]) ][ int(self.testData[l][-1]) ] += 1
             accuracy = (float(correct)/float(trows))
 
-        print("Accuracy = " + str(accuracy) + "%")
+        print("Accuracy = " + str(accuracy))
 
         np.set_printoptions(suppress = True)
         print("\nConfusion Matrix")
@@ -190,7 +194,7 @@ class KMeans:
         # Display images.
         for i in range(kvalue):
             plt.imshow(np.reshape(m[i][:-1], (8, 8)), cmap='Greys')
-            plt.savefig("cluster"+str(i))
+            plt.savefig("k"+str(kvalue)+"cluster"+str(i))
 
         return
 
@@ -232,3 +236,4 @@ if __name__ == '__main__':
 
     km = KMeans(train, test)
     km.train(10)
+    km.train(30)
