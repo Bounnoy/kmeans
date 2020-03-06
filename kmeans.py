@@ -135,8 +135,6 @@ class KMeans:
                         mss += self.calculate_euclidian(m[i][:-1], m[j][:-1])
             mss /= (kvalue * (kvalue - 1) / 2)
 
-            print("Iterations =", count)
-
             if mse < bestMSE:
                 bestRun = runs
                 bestMSE = mse
@@ -152,6 +150,7 @@ class KMeans:
         trows = len(self.testData)
         td2 = np.zeros((trows, kvalue))
         correct = 0
+        matrix = np.zeros((10, 10))
 
         for l in range(trows):
             min = 0
@@ -168,7 +167,16 @@ class KMeans:
             if int(m[min][-1]) == int(self.testData[l][-1]):
                 correct += 1
 
-        print("Accuracy = " + str(correct/trows))
+            # Plot our data in the table.
+            matrix[ int(m[min][-1]) ][ int(self.testData[l][-1]) ] += 1
+            accuracy = (float(correct)/float(trows))
+
+        print("Accuracy = " + str(accuracy) + "%")
+
+        np.set_printoptions(suppress = True)
+        print("\nConfusion Matrix")
+        print(matrix, "\n")
+
 
 
 if __name__ == '__main__':
@@ -206,9 +214,6 @@ if __name__ == '__main__':
     file2 = open(testName + ".pkl", "rb")
     test = pickle.load(file2)
     file2.close()
-
-    print("Training rows/cols:", len(train), ",", len(train[0]))
-    print("Testing rows/cols:", len(test), ",", len(test[0]))
 
     km = KMeans(train, test)
     km.train(10)
