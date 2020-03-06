@@ -7,6 +7,7 @@
 # This program was built in Python 3.
 
 from pathlib import Path
+import matplotlib.pyplot as plt
 import math
 import numpy as np
 import csv
@@ -177,7 +178,21 @@ class KMeans:
         print("\nConfusion Matrix")
         print(matrix, "\n")
 
+        with open('results.csv', 'a') as csvFile:
+            w = csv.writer(csvFile)
+            w.writerow([])
+            w.writerow(["Confusion Matrix"])
+            for j in range(10):
+                w.writerow(matrix[j,:])
+            w.writerow(["Final Accuracy"] + [accuracy])
+            w.writerow([])
 
+        # Display images.
+        for i in range(kvalue):
+            plt.imshow(np.reshape(m[i][:-1], (8, 8)), cmap='Greys')
+            plt.savefig("cluster"+str(i))
+
+        return
 
 if __name__ == '__main__':
 
